@@ -57,6 +57,7 @@ def main():
         Chebyshev Type II, fs = 8MHz, fpass = 100kHz, fstop = 103kHz, Astop=100dB, Apass=1dB
         27 sections, order = 53
     """
+
     SOS = [
         [0.995479543133467093, -1.984442343028223199, 0.995479543133467093, 1.000000000000000000, -1.992735837405045007,
          0.998943837906379417],
@@ -112,7 +113,6 @@ def main():
          0.518049962948276210],
         [0.149602974506854058, 0.149602974506854058, 0.000000000000000000, 1.000000000000000000, -0.703314433339987333,
          0.000000000000000000]]
-
     """ Filter section gain-values and overall output gain.
         This array can have different dimensions/lengths:   
         If SOSGAIN_EN is true: It must be at least as long as the number of sections, as each section 
@@ -181,7 +181,7 @@ def main():
     """ File-Names and directories for Data Storage.
         This script generates various text-files containing filter configurations and testbench stimuli. 
     """
-    FILENAME_METADATA = 'FilterMetaData.txt'  # Stores information for the VHDL generic header
+    FILENAME_METADATA = 'new_1.txt'  # Stores information for the VHDL generic header
     DIRNAME_STIMULIDATA = 'FilterStimuliData'  # Directory where testbench-related data is stored.
 
     """ END OF USER INPUT: Implementation follows. """
@@ -317,13 +317,19 @@ def write_filter_coe_testbench(sosd, gd, sosgain_en, finalgain_en, dirpath):
         outgain = 0  # Write zero; to allow testbench-read
         g = np.zeros(numsec, dtype=int)  # Write zero; to allow testbench-read
 
+    b0_int = b0.astype(int).tolist()
+    b1_int = b1.astype(int).tolist()
+    b2_int = b2.astype(int).tolist()
+    a1_int = a1.astype(int).tolist()
+    a2_int = a2.astype(int).tolist()
+    g_int = g.astype(int).tolist()
     # Write the coefficients of the sections into their files:
-    [write_string_append(filename_b0, repr(x)) for x in b0]
-    [write_string_append(filename_b1, repr(x)) for x in b1]
-    [write_string_append(filename_b2, repr(x)) for x in b2]
-    [write_string_append(filename_a1, repr(x)) for x in a1]
-    [write_string_append(filename_a2, repr(x)) for x in a2]
-    [write_string_append(filename_g, repr(x)) for x in g]
+    [write_string_append(filename_b0, repr(x)) for x in b0_int]
+    [write_string_append(filename_b1, repr(x)) for x in b1_int]
+    [write_string_append(filename_b2, repr(x)) for x in b2_int]
+    [write_string_append(filename_a1, repr(x)) for x in a1_int]
+    [write_string_append(filename_a2, repr(x)) for x in a2_int]
+    [write_string_append(filename_g, repr(x)) for x in g_int]
     write_string_append(filename_finalgain, repr(outgain))
 
 
